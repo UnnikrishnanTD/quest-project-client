@@ -1,0 +1,45 @@
+<div class="user-info">
+    <h4>User Registration Form</h4>
+    <div class="user-info__form">
+        
+        <form [formGroup]="user" >
+            <mat-form-field appearance="outline">
+                <mat-label>User Name</mat-label>
+                <input required="true" matInput formControlName="name" placeholder="Enter User Full name">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>PPS Number</mat-label>
+                <input required="true" matInput formControlName="ppsNumber" placeholder="Enter PPS Number">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Date of birth</mat-label>
+                <input required="true" matInput [max]="today" formControlName="dob" [matDatepicker]="picker" placeholder="Enter Date of Birth">
+                <mat-hint>Use this format: DD/MM/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="mobile">
+                <mat-label>Mobile Number</mat-label>
+                <input matInput formControlName="mobile" placeholder="Enter Mobile Number">
+                <mat-hint>08XXXXXXX</mat-hint>
+              </mat-form-field>
+              <div class="form-buttons">
+                <button mat-stroked-button class="form-buttons__btn">Clear</button>
+                <button mat-flat-button  class="form-buttons__btn" (click)="submitForm()" [disabled]="user.invalid">Save</button>
+              </div>
+
+              <mat-card appearance="outlined" class="user-info__form__notes">
+                <mat-card-content>
+                    Note:
+                    <ul>
+                        <li>User Name maximum of 25 charcters.</li>
+                        <li>Date of birth cannot be in the future.</li>
+                        <li>User must be at least 16 years old.</li>
+                        <li>Mobile number must begin with 08.</li>
+                    </ul>
+                    
+                </mat-card-content>
+              </mat-card>
+        </form>
+    </div>
+</div>

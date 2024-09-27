@@ -1,0 +1,30 @@
+.user-info {
+    &__form {
+        justify-content: center;
+        display: flex;
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            .mobile{
+                margin-top: 1em;
+            }
+            .form-buttons{
+                margin-top: 1em;
+                display: flex;
+                gap: 1em;
+                justify-self: right;
+                &__btn{
+                    width: 50%;
+                }
+            }
+        }
+        &__notes{
+            margin-top: 4em;
+            font-size: .8em;
+            font-style: italic;
+        }
+
+    }
+}

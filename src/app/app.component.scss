@@ -1,0 +1,24 @@
+.app {
+    &__content {
+        &__menu-container {
+            background-color: white;
+            height: 90vh;
+        }
+
+        &__side-nav {
+            // background-color: #039BE5;
+            padding: 1em;
+            &__items{
+                display: flex;
+                flex-direction: column;
+                &__item{
+                    justify-content: left;
+                    color: #FFF;
+                }
+            }
+        }
+        &__outlet-panel{
+            padding: 1em;
+        }
+    }
+}

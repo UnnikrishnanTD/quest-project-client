@@ -1,0 +1,10 @@
+.users-list {
+    &__no-data {
+        height: 20vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.7em;
+        color: #8c8888;
+    }
+}
