@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { UserVO } from '../../model/user-vo';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,6 +11,7 @@ import { ServerconnectorService } from '../../service/serverconnector.service';
 import { Store } from '@ngrx/store';
 import { errorAction } from '../../store/error-action';
 import { MatCardModule } from '@angular/material/card';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 
 @Component({
@@ -33,10 +34,11 @@ import { MatCardModule } from '@angular/material/card';
     MatCardModule
   ],
 })
-export class UserInfoComponent {
+export class UserInfoComponent implements OnDestroy{
 
   public user!: FormGroup;
   public today = new Date();
+  mobileQuery!: MediaQueryList;
   constructor(private serverconnectorService: ServerconnectorService,
     private store: Store<{
       error: {
@@ -45,15 +47,60 @@ export class UserInfoComponent {
       }
     }>
   ) {
+    this._cerateUserForm();
+    /**
+     * To Handle resposiveness in resgitarion form for small devices
+     */
+    const changeDetectorRef = inject(ChangeDetectorRef);
+    const media = inject(MediaMatcher);
+
+    this.mobileQuery = media.matchMedia('(max-width: 650px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+  }
+
+  private _mobileQueryListener: () => void;
+
+  private _cerateUserForm(): void{
     this.user = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(25)]),
       ppsNumber: new FormControl('', Validators.required),
-      dob: new FormControl('', [Validators.required]),
+      dob: new FormControl('', [Validators.required, this._dateValidator]),
       mobile: new FormControl('', Validators.pattern(/^08\d{8,10}$/)),
 
     });
   }
 
+  /**
+   * @description Creatig custom validator for DOB check
+   * @param control DOB value
+   * @returns 
+   */
+  private _dateValidator(control: FormControl):ValidationErrors | null {
+    if (control.value) {
+      const birthDate = new Date(control.value);
+      const today = new Date();
+
+      // Calculate the difference in years between today and the birthdate
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDifference = today.getMonth() - birthDate.getMonth();
+
+      // Adjust if the birthdate hasn't been reached this year yet
+      if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      // Check if the age is less than the required minimum age
+      if(age < 16){
+       return { invalidDate: true };
+      }
+    }
+    return null;
+  }
+
+  /**
+   * @description Form submission to server
+   */
   public submitForm(): void {
 
     const uservo = {} as UserVO;
@@ -70,7 +117,13 @@ export class UserInfoComponent {
     }))
   }
 
-  public clearForm(): void{
-
+  /**
+   * Reset form to initial state
+   */
+  public clearForm(): void {
+    this.user.reset();
+  }
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 }

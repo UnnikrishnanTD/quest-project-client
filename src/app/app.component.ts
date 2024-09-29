@@ -23,5 +23,5 @@ import { MessageDisplayComponent } from './components/message-display/message-di
 })
 export class AppComponent {
   title = 'quest-project';
-  opened: boolean = true;
+  opened: boolean = false;
 }

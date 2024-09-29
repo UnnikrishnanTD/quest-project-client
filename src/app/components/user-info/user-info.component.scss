@@ -2,13 +2,18 @@
     &__form {
         justify-content: center;
         display: flex;
-        
+        .small-media{
+            width: 100%;
+        }
         form {
             display: flex;
             flex-direction: column;
             width: 50%;
-            .mobile{
-                margin-top: 1em;
+            .ip-filed{
+                margin-top: .6em;
+            }
+            .error-info{
+                color: #ba1a1a;
             }
             .form-buttons{
                 margin-top: 1em;

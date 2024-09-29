@@ -11,8 +11,8 @@
   </div>
   <div class="app__content">
     <app-message-display></app-message-display>
-    <mat-sidenav-container class="app__content__menu-container">
-      <mat-sidenav #sidenav mode="side" [(opened)]="opened" class="app__content__side-nav">
+    <mat-sidenav-container class="app__content__menu-container" [hasBackdrop]="true">
+      <mat-sidenav #sidenav mode="over" [(opened)]="opened" class="app__content__side-nav">
         <div class="app__content__side-nav__items">
           <button mat-button class="app__content__side-nav__items__item" routerLink="/home">Home</button>
           <button mat-button class="app__content__side-nav__items__item" routerLink="/user-info">Add User</button>

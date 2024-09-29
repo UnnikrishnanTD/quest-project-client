@@ -2,29 +2,54 @@
     <h4>User Registration Form</h4>
     <div class="user-info__form">
         
-        <form [formGroup]="user" >
-            <mat-form-field appearance="outline">
+        <form [formGroup]="user" [ngClass]="{'small-media': mobileQuery.matches}">
+            <mat-form-field appearance="outline" class="ip-filed">
                 <mat-label>User Name</mat-label>
                 <input required="true" matInput formControlName="name" placeholder="Enter User Full name">
+                <mat-hint *ngIf="user.controls['name'].touched" class="error-info">
+                  @if(user.controls['name'].errors?.['required']){
+                    This is mandatory
+                  }@else if (user.controls['name'].errors?.['maxlength']) {
+                    Maximum length exceeded for Name
+                  }
+                </mat-hint>
               </mat-form-field>
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="outline" class="ip-filed">
                 <mat-label>PPS Number</mat-label>
                 <input required="true" matInput formControlName="ppsNumber" placeholder="Enter PPS Number">
+                <mat-hint *ngIf="user.controls['ppsNumber'].touched" class="error-info">
+                  @if(user.controls['ppsNumber'].errors?.['required']){
+                    This is mandatory
+                  }
+                </mat-hint>
               </mat-form-field>
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="outline" class="ip-filed">
                 <mat-label>Date of birth</mat-label>
                 <input required="true" matInput [max]="today" formControlName="dob" [matDatepicker]="picker" placeholder="Enter Date of Birth">
-                <mat-hint>Use this format: DD/MM/YYYY</mat-hint>
+                <mat-hint *ngIf="user.controls['dob'].touched" class="error-info">
+                  @if(user.controls['dob'].errors?.['required']){
+                    This is mandatory 
+                  }@else if(user.controls['dob'].errors?.['invalidDate']){
+                    User must be at least 16 years old.
+                  }
+                </mat-hint>
+                <mat-hint [align]="'end'" *ngIf="!user.controls['dob'].errors?.['invalidDate']">Use this format: DD/MM/YYYY</mat-hint>
+                
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
-              <mat-form-field appearance="outline" class="mobile">
+              <mat-form-field appearance="outline" class="ip-filed">
                 <mat-label>Mobile Number</mat-label>
                 <input matInput formControlName="mobile" placeholder="Enter Mobile Number">
-                <mat-hint>08XXXXXXX</mat-hint>
+                <mat-hint *ngIf="user.controls['mobile'].touched" class="error-info">
+                  @if(user.controls['mobile'].errors?.['pattern']){
+                    Invalid Pattern &nbsp;
+                  }
+                </mat-hint>
+                <mat-hint [align]="'end'">Eg: 08XXXXXXX</mat-hint>
               </mat-form-field>
               <div class="form-buttons">
-                <button mat-stroked-button class="form-buttons__btn">Clear</button>
+                <button mat-stroked-button class="form-buttons__btn" (click)="clearForm()">Clear</button>
                 <button mat-flat-button  class="form-buttons__btn" (click)="submitForm()" [disabled]="user.invalid">Save</button>
               </div>
 

@@ -19,7 +19,12 @@ export class ErrorInterceptor implements HttpInterceptor {
       .handle(request)
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.store.dispatch(errorAction( {code:error?.error?.code, message:error?.error?.message}));
+          if(error.statusText === 'Unknown Error'){
+            this.store.dispatch(errorAction( {code:'500', message:'Unexpected error occured. please contact system admin.'}));
+          }else{
+            this.store.dispatch(errorAction( {code:error?.error?.code, message:error?.error?.message}));
+          }
+          
           return throwError(error);
         })
       )

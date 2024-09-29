@@ -23,6 +23,13 @@ export class UsersListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private serverconnector: ServerconnectorService) {
+    this._getAllUsers();
+  }
+
+  /**
+   * @description get all users details from server
+   */
+  private _getAllUsers(): void {
     this.serverconnector.get('getAll').subscribe((data: UserVO[]) => {
       if (data?.length > 0) {
         this.dataSource = new MatTableDataSource<UserVO>(data);
